@@ -21,5 +21,5 @@ After downloding the repo or cloning it you will find requirements.txt so naviga
 
 ## Instructions
 
-After downloding the repo or cloning it ,navigate to the folder where youplaced the files on and Type `python GetCoupon.py` then the program will ask you for the link or tha name of the course, I recommend to give it the link as it will get the correct name of the course.
-
+After downloding the repo or cloning it ,navigate to the folder where you placed the files on and Type `python GetCoupon.py Course` as Course is the course url or its name, I recommend using udemy link as it will get the correct name of the course. 
+you also can run the program with no arguments and it will ask you for the URL.
