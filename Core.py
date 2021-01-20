@@ -133,6 +133,22 @@ def discudemy(CourseName):
     udemy_link = soup.select('body > div.ui.container.mt10 > div:nth-child(3) > div > a')[0].get('href')
     return udemy_link
 
+def geeksgod(CourseName):
+    DOMAIN = 'https://geeksgod.com/'
+    params = {'s':CourseName}
+    res = requests.get(DOMAIN, params=params)
+    soup = bs4.BeautifulSoup(res.content, 'html.parser')
+    link = soup.select_one('#td-outer-wrap > div.td-main-content-wrap.td-container-wrap > div > div.td-pb-row > div.td-pb-span8.td-main-content > div > div:nth-child(2) > div.item-details > h3 > a')
+    if not link:
+        return ''
+    courseLink = link.get('href')
+
+    res = requests.get(courseLink)
+    soup = bs4.BeautifulSoup(res.content, 'html.parser')
+    coupon = soup.select_one('#coupon > div > p').getText()
+    return f'$ {coupon}'
+
+
 def getCoupon(CourseName):
     try:
         TB = tutorialbar(CourseName)
@@ -154,5 +170,9 @@ def getCoupon(CourseName):
         DU = discudemy(CourseName)
     except:
         DU = []
+    try:
+        GG = geeksgod(CourseName)
+    except:
+        GG = ''
     
-    return [TB] + [CS] + RD + [SB] + [DU]
+    return [TB] + [CS] + RD + [SB] + [DU] + [GG]

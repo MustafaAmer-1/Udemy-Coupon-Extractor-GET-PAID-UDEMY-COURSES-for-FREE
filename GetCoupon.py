@@ -7,7 +7,7 @@ from Core import getCoupon
 
 if __name__ == "__main__":
     if len(argv) > 1:
-        course = argv[1]
+        course = ' '.join(argv[1:])
     else:
         course = input("Enter The course name or URL\n")
 
@@ -17,15 +17,24 @@ if __name__ == "__main__":
         courseName = course
 
 
-    couponLinks = getCoupon(courseName)
+    coupons = getCoupon(courseName)
 
     ## Print Colored Text ##
     init()
 
-    if any(couponLinks):
+    if any(coupons):
         print(colored("\nHere's ur Coupon Links", 'yellow') + "\n")
-        for link in couponLinks:
-            print(colored(str(link) + '\n', 'cyan'))
+        for item in coupons:
+            if item and item[0].startswith('$'):
+                if course.startswith('http'):
+                    req = requests.models.PreparedRequest()
+                    params={'couponCode':item.split()[1]}
+                    req.prepare_url(course, params)
+                    print(colored(req.url + '\n', 'cyan'))
+                else:
+                    print(colored(f'Course Coupon:  {item.split()[1]}' + '\n', 'cyan'))
+                continue
+            print(colored(str(item) + '\n', 'cyan'))
     else:
         print(colored("\nNo coupon Founded Make sure u write the right name or Write URL for good search\n", 'red'))
 
