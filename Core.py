@@ -107,6 +107,32 @@ def smartybro(CourseName):
     udemy_link = soup.find('a', class_='fasc-type-flat').get('href')
     return udemy_link
 
+def discudemy(CourseName):
+    DOMAIN = 'https://www.discudemy.com/s-r/'
+    for i in range(5):
+        res = requests.get(DOMAIN + CourseName.replace(' ', '-') + '.jsf')
+        if res.status_code == 200:
+            break
+    if res.status_code != 200:
+        return ''
+    
+    soup = bs4.BeautifulSoup(res.content, 'html.parser')
+    ancherElements = soup.find_all('a', class_='card-header')
+    link = ''
+    for element in ancherElements:
+        if CourseName in element.getText():
+            link = element.get('href')
+            break
+    
+    res = requests.get(link)
+    soup = bs4.BeautifulSoup(res.content, 'html.parser')
+    courseLink = soup.find('a', class_='discBtn').get('href')
+
+    res = requests.get(courseLink)
+    soup = bs4.BeautifulSoup(res.content, 'html.parser')
+    udemy_link = soup.select('body > div.ui.container.mt10 > div:nth-child(3) > div > a')[0].get('href')
+    return udemy_link
+
 def getCoupon(CourseName):
     try:
         TB = tutorialbar(CourseName)
@@ -124,4 +150,9 @@ def getCoupon(CourseName):
         SB = smartybro(CourseName)
     except:
         SB = []
-    return [TB] + [CS] + RD + [SB]
+    try:
+        DU = discudemy(CourseName)
+    except:
+        DU = []
+    
+    return [TB] + [CS] + RD + [SB] + [DU]
