@@ -1,11 +1,10 @@
 import requests, bs4, os
 from termcolor import colored
 from colorama import init
-from sys import argv
 
-from Core import getCoupon
+from coupon_extractor.Core import getCoupon
 
-if __name__ == "__main__":
+def main(argv):
     if len(argv) > 1:
         course = ' '.join(argv[1:])
     else:
